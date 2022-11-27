@@ -18,7 +18,7 @@ export interface UserAddress {
 }
 
 export interface User {
-  id: number;
+  id: string;
   name: string;
   username: string;
   email: string;
@@ -26,4 +26,19 @@ export interface User {
   phone: string;
   website: string;
   company: Company;
+}
+
+export interface UserModalProps {
+  fields?: User;
+  onSubmit?: (user: User) => void;
+}
+
+export interface ConfirmModalProps {
+  title: string;
+  onClick: () => void;
+}
+
+export enum ROUTES {
+  user = "user",
+  home = "home",
 }
