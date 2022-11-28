@@ -28,7 +28,7 @@ export interface User {
   company: Company;
 }
 
-export type EditedField = Record<User["id"], string[]>;
+export type EditedField = string[];
 
 export interface UserModalProps {
   fields?: User;

@@ -24,7 +24,7 @@ const initialPokeState: UserState = {
   users: [],
   userModal: null,
   confirmModal: null,
-  editedFields: {},
+  editedFields: [],
 };
 
 export const userSlice = createSlice({
@@ -32,9 +32,6 @@ export const userSlice = createSlice({
   initialState: initialPokeState,
 
   reducers: {
-    setUsers: (state, action: PayloadAction<UserState["users"]>) => {
-      state.users = action.payload;
-    },
     removeUser: (state, { payload }: PayloadAction<string>) => {
       const theIndex = state.users.findIndex((user) => user.id === payload);
       if (theIndex === -1) return console.warn("cannot find user");
@@ -60,7 +57,6 @@ export const userSlice = createSlice({
     closeUserModal: (state) => {
       state.userModal = null;
     },
-
     openConfirmModal: (
       state,
       { payload }: PayloadAction<ConfirmModalProps>
@@ -70,15 +66,8 @@ export const userSlice = createSlice({
     closeConfirmModal: (state) => {
       state.confirmModal = null;
     },
-
-    markFieldAsEdited: (
-      state,
-      { payload }: PayloadAction<{ id: string; field: string }>
-    ) => {
-      state.editedFields[payload.id] = [
-        ...(state.editedFields[payload.id] ?? []),
-        payload.field,
-      ];
+    markFieldAsEdited: (state, { payload }: PayloadAction<string>) => {
+      state.editedFields.push(payload);
     },
   },
 
@@ -91,7 +80,6 @@ export const userSlice = createSlice({
 export const userReducer = userSlice.reducer;
 
 export const {
-  setUsers,
   removeUser,
   createUser,
   openUserModal,

@@ -11,6 +11,18 @@ import {
 } from "@/store";
 import { ROUTES, User } from "@/types";
 import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+`;
+
+const Header = styled(Container)`
+  width: 100%;
+`;
 
 export const HomePage = () => {
   const navigate = useNavigate();
@@ -62,15 +74,18 @@ export const HomePage = () => {
   };
 
   return (
-    <div>
-      <SearchField onSearch={handleSearch} />
-      <Button onClick={handleOpenModalCreateUser}>Create a new user</Button>
+    <Container>
+      <Header>
+        <SearchField onSearch={handleSearch} />
+        <Button onClick={handleOpenModalCreateUser}>Create a new user</Button>
+      </Header>
+
       <UserTable
         data={users}
         onRowClick={handleRowClick}
         onEdit={handleEditUser}
         onRemove={handleRemoveUser}
       />
-    </div>
+    </Container>
   );
 };

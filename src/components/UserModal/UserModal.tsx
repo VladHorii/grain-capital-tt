@@ -5,6 +5,7 @@ import {
   fieldsMask,
   Modal,
 } from "@/components";
+import { markFieldAsEdited, useAppDispatch } from "@/store";
 import { User, UserModalProps } from "@/types";
 import { TextField } from "@mui/material";
 import { useFormik } from "formik";
@@ -19,10 +20,16 @@ export const UserModal = <T extends User>({
   onSubmit,
   onClose,
 }: Props) => {
+  const dispatch = useAppDispatch();
+
   const { values, handleChange, handleSubmit } = useFormik({
     initialValues: { ...createInitialValues(fields) },
     onSubmit: (values) => {
       if (onSubmit) {
+        if (fields) {
+          dispatch(markFieldAsEdited(fields.id));
+        }
+
         onSubmit(createUserFromInitialValues(values, fields?.id) as T);
       }
       onClose();

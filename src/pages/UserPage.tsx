@@ -1,14 +1,30 @@
 import { Button } from "@/components";
 import { useGetUser } from "@/hooks";
-import { getUsers, useAppSelector } from "@/store";
+import { getEditedFields, getUsers, useAppSelector } from "@/store";
 import { ROUTES } from "@/types";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import styled from "styled-components";
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 20px;
+`;
+
+const Text = styled.span`
+  font-size: 18px;
+  font-weight: 500;
+  color: red;
+`;
 
 export const UserPage = () => {
   const navigate = useNavigate();
   const { userId } = useParams();
   const { user, userIndex } = useGetUser(userId);
   const users = useAppSelector(getUsers);
+  const editedFields = useAppSelector(getEditedFields);
 
   const handlePrevBtnClick = () => {
     if (userIndex === null) return;
@@ -26,11 +42,15 @@ export const UserPage = () => {
     navigate(`/${ROUTES.user}/${nextUser.id}`);
   };
 
-  return (
-    <>
-      {!user && <div>Loading...</div>}
+  if (!user) {
+    return <div>Loading...</div>;
+  }
 
-      {user && <pre>{JSON.stringify(user, null, 2)}</pre>}
+  return (
+    <Container>
+      {editedFields.includes(user.id) && <Text>User has been edited</Text>}
+
+      <pre>{JSON.stringify(user, null, 2)}</pre>
 
       <div>
         <Button onClick={handlePrevBtnClick} disabled={userIndex === 0}>
@@ -46,6 +66,6 @@ export const UserPage = () => {
       </div>
 
       <Link to={`/${ROUTES.home}`}>Go to home page</Link>
-    </>
+    </Container>
   );
 };

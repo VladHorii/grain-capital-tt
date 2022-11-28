@@ -1,12 +1,15 @@
 import { Button } from "@/components";
+import { getEditedFields, useAppSelector } from "@/store";
 import { User } from "@/types";
-import Paper from "@mui/material/Paper";
+import {
+  Paper,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@mui/material";
 import MuiTable from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
 import { MouseEvent } from "react";
 
 export interface TableProps<T extends {}> {
@@ -22,6 +25,8 @@ export const UserTable = <T extends User>({
   onEdit,
   onRemove,
 }: TableProps<T>) => {
+  const editedFields = useAppSelector(getEditedFields);
+
   const handleRemove = (event: MouseEvent<HTMLButtonElement>, row: T) => {
     event.stopPropagation();
     if (onRemove) {
@@ -49,11 +54,17 @@ export const UserTable = <T extends User>({
               <TableCell>action</TableCell>
             </TableRow>
           </TableHead>
+
           <TableBody>
             {data.map((row) => (
               <TableRow
                 key={row.name}
-                sx={{ cursor: "pointer" }}
+                sx={{
+                  cursor: "pointer",
+                  fontStyle: editedFields.includes(row.id)
+                    ? "italic"
+                    : "normal",
+                }}
                 onClick={() => onRowClick && onRowClick(row)}
               >
                 <TableCell>{row.id}</TableCell>
