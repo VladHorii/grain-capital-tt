@@ -28,6 +28,8 @@ export interface User {
   company: Company;
 }
 
+export type EditedField = Record<User["id"], string[]>;
+
 export interface UserModalProps {
   fields?: User;
   onSubmit?: (user: User) => void;

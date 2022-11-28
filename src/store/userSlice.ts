@@ -1,5 +1,5 @@
 import { getUsersAPI } from "@/api/userAPI";
-import { ConfirmModalProps, User, UserModalProps } from "@/types";
+import { ConfirmModalProps, EditedField, User, UserModalProps } from "@/types";
 import {
   createAsyncThunk,
   createSlice,
@@ -17,12 +17,14 @@ export interface UserState {
   users: User[];
   userModal: UserModalProps | null;
   confirmModal: ConfirmModalProps | null;
+  editedFields: EditedField;
 }
 
 const initialPokeState: UserState = {
   users: [],
   userModal: null,
   confirmModal: null,
+  editedFields: {},
 };
 
 export const userSlice = createSlice({
@@ -68,6 +70,16 @@ export const userSlice = createSlice({
     closeConfirmModal: (state) => {
       state.confirmModal = null;
     },
+
+    markFieldAsEdited: (
+      state,
+      { payload }: PayloadAction<{ id: string; field: string }>
+    ) => {
+      state.editedFields[payload.id] = [
+        ...(state.editedFields[payload.id] ?? []),
+        payload.field,
+      ];
+    },
   },
 
   extraReducers: (builder) => {
@@ -87,8 +99,10 @@ export const {
   changeUser,
   openConfirmModal,
   closeConfirmModal,
+  markFieldAsEdited,
 } = userSlice.actions;
 
 export const getUsers = (state: RootState) => state.user.users;
 export const getUserModal = (state: RootState) => state.user.userModal;
 export const getConfirmModal = (state: RootState) => state.user.confirmModal;
+export const getEditedFields = (state: RootState) => state.user.editedFields;
